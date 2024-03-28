@@ -15,7 +15,7 @@ import OperatorShiftHeader from "./components/OperatorShiftHeader";
 import PickOperator from "./components/PickOperator";
 import LastOfframpsTable from "./components/LastOfframpsTable";
 import IssueResolutionControl from "./components/IssueResolutionControl";
-
+import RecipientInfo from "./components/RecipientInfo"
 import AddPhoto from "./components/AddPhoto";
 
 function TradeStatusControl({
@@ -120,6 +120,55 @@ function MainOfframpsDashboard() {
   // ...
 }
 
+function RecipientLookupDashboard() {
+  // Get the userId param from the URL.
+  const navigate = useNavigate();
+
+ 
+
+  const [address,setAddress] = useState()
+  const handleChangeInput = (e) => {
+    e.preventDefault()
+    setAddress(e.target.value)
+  }
+  const handleNavigateToRecipient = () => {
+    navigate(`/recipients/${address}`);
+
+  }
+
+  return (
+    <div>
+      
+
+      <div style={{ width: "75%", margin: "auto", marginTop:"25px" }}>
+       <input onChange={handleChangeInput} value={address} />
+
+       <button onClick={handleNavigateToRecipient}>
+        Search
+       </button>
+      </div>
+    </div>
+  );
+  // ...
+}
+
+
+function RecipientInfoDashboard() {
+  // Get the userId param from the URL.
+  let { address } = useParams();
+
+  return (
+    <div>
+      
+
+      <div style={{ width: "60%", margin: "auto" }}>
+        <RecipientInfo address={address} />
+      </div>
+    </div>
+  );
+  // ...
+}
+
 function App() {
   return (
     <Router>
@@ -130,6 +179,14 @@ function App() {
           <Route
             path="/offrampdetailsdashboard/:offrampId/:nickname"
             element={<OfframpDetailsDashboard />}
+          />
+          <Route
+            path="/recipients"
+            element={<RecipientLookupDashboard />}
+          />
+           <Route
+            path="/recipients/:address"
+            element={<RecipientInfoDashboard />}
           />
         </Routes>
       </div>
