@@ -30,7 +30,7 @@ function RecipientInfo({ address }) {
     const url = `${SERVER_URL}/recipients/address/${address}`;
     return axios.get(url).then((res) => {
       const {nickname,bankName,phoneNumber,cardPhoneNumber,email,bankSpecificFieldValue} = res.data;
-      setRecipientData({nickname,bankName,phoneNumber,cardPhoneNumber,email,bankSpecificFieldValue});
+      setRecipientData({nickname,bankName,phoneNumber,cardPhoneNumber:cardPhoneNumber || phoneNumber,email,bankSpecificFieldValue});
       setLoading(false);
     });
   };
