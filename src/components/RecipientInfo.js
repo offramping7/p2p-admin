@@ -17,8 +17,8 @@ function RecipientInfo({ address }) {
     bankName: "",
     phoneNumber: "",
     email: "",
-    bankSpecificFieldValue:"",
-    cardPhoneNumber:""
+    bankSpecificFieldValue: "",
+    cardPhoneNumber: "",
   });
   const [loading, setLoading] = useState(true);
 
@@ -29,14 +29,32 @@ function RecipientInfo({ address }) {
   const fetchRecipientData = async () => {
     const url = `${SERVER_URL}/recipients/address/${address}`;
     return axios.get(url).then((res) => {
-      const {nickname,bankName,phoneNumber,cardPhoneNumber,email,bankSpecificFieldValue} = res.data;
-      setRecipientData({nickname,bankName,phoneNumber,cardPhoneNumber:cardPhoneNumber || phoneNumber,email,bankSpecificFieldValue});
+      const {
+        nickname,
+        bankName,
+        phoneNumber,
+        cardPhoneNumber,
+        email,
+        bankSpecificFieldValue,
+      } = res.data;
+      setRecipientData({
+        nickname,
+        bankName,
+        phoneNumber,
+        cardPhoneNumber: cardPhoneNumber || phoneNumber,
+        email,
+        bankSpecificFieldValue,
+      });
       setLoading(false);
     });
   };
   if (loading === true) {
     return <>Loading, please wait</>;
   }
+
+  const goToUrl = (url) => {
+    window.location.href = url;
+  };
 
   return (
     <>
@@ -79,6 +97,18 @@ function RecipientInfo({ address }) {
             </TableRow>
 
             <TableRow
+              key={"cardPhoneNumber"}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {"phone (SBP)"}
+              </TableCell>
+              <TableCell align="right">
+                {recipientData?.cardPhoneNumber}
+              </TableCell>
+            </TableRow>
+
+            <TableRow
               key={"email"}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
@@ -87,6 +117,7 @@ function RecipientInfo({ address }) {
               </TableCell>
               <TableCell align="right">{recipientData?.email}</TableCell>
             </TableRow>
+
             <TableRow
               key={"cardNumber"}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -95,60 +126,32 @@ function RecipientInfo({ address }) {
                 {"Card Number"}
               </TableCell>
               <TableCell align="right">
-                {recipientData?.bankSpecificFieldsMap.cardNumber || "empty"}
-              </TableCell>
-            </TableRow>
-            <TableRow
-              key={"yooMoneyWalletNumber"}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {"Yoomoney wallet number"}
-              </TableCell>
-              <TableCell align="right">
-                {recipientData?.bankSpecificFieldsMap.yooMoneyWalletNumber ||
-                  "empty"}
+                {recipientData?.bankSpecificFieldValue || "empty"}
               </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
-      <div className="mt-5 w-50 mx-auto">
-        {!!recipientData?.bankSpecificFieldsMap?.cardNumber && (
-          <Link
-            to={{
-              pathname:
-                "https://bincheck.io/details/" +
-                recipientData?.bankSpecificFieldsMap?.cardNumber.slice(0, 8),
-            }}
-            target="_blank"
-          >
-            Lookup Bin
-          </Link>
-        )}
-      </div>
-
-      <div className="mt-5 w-50 mx-auto">
-        {!!recipientData?.bankSpecificFieldsMap?.cardNumber && (
-          <a
-            href={
+      <div className="mt-5 w-100 mx-auto btn btn-primary">
+        {!!recipientData?.bankSpecificFieldValue && (
+          <button
+            onClick={()=>goToUrl(
               "https://bincheck.io/details/" +
-              recipientData?.bankSpecificFieldsMap?.cardNumber.slice(0, 8)
-            }
+                recipientData?.bankSpecificFieldValue
+            )}
           >
             Lookup Bin
-          </a>
+          </button>
         )}
       </div>
 
       <div className="mt-5 w-50 mx-auto">
         {!!recipientData?.phoneNumber && (
-          <Link
-            to={{ pathname: "https://wa.me/" + recipientData.phoneNumber }}
-            target="_blank"
+          <button
+            onClick={()=>goToUrl( "https://wa.me/" + recipientData.phoneNumber)}
           >
             Message on whatsapp
-          </Link>
+          </button>
         )}
       </div>
     </>
