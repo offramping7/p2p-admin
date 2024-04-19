@@ -141,6 +141,7 @@ function RecipientLookupDashboard() {
       
 
       <div style={{ width: "75%", margin: "auto", marginTop:"25px" }}>
+        <OperatorShiftHeader />
        <input onChange={handleChangeInput} value={address} />
 
        <button onClick={handleNavigateToRecipient}>
@@ -160,7 +161,7 @@ function RecipientInfoDashboard() {
   return (
     <div>
       
-
+      <OperatorShiftHeader />
       <div style={{ width: "60%", margin: "auto" }}>
         <RecipientInfo address={address} />
       </div>
