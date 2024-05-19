@@ -18,7 +18,6 @@ function RecipientInfo({ address }) {
     phoneNumber: "",
     email: "",
     bankSpecificFieldValue: "",
-    cardPhoneNumber: "",
   });
   const [loading, setLoading] = useState(true);
 
@@ -33,7 +32,6 @@ function RecipientInfo({ address }) {
         nickname,
         bankName,
         phoneNumber,
-        cardPhoneNumber,
         email,
         bankSpecificFieldValue,
       } = res.data;
@@ -41,7 +39,6 @@ function RecipientInfo({ address }) {
         nickname,
         bankName,
         phoneNumber,
-        cardPhoneNumber: cardPhoneNumber || phoneNumber,
         email,
         bankSpecificFieldValue,
       });
@@ -84,7 +81,7 @@ function RecipientInfo({ address }) {
               <TableCell component="th" scope="row">
                 {"bankName"}
               </TableCell>
-              <TableCell align="right">{recipientData?.bankName}</TableCell>
+              <TableCell align="right">{recipientData?.bankName} {detectIsPhone(recipientData?.phoneNumber) && "SBP"}</TableCell>
             </TableRow>
             <TableRow
               key={"phoneNumber"}
@@ -96,17 +93,7 @@ function RecipientInfo({ address }) {
               <TableCell align="right">{recipientData?.phoneNumber}</TableCell>
             </TableRow>
 
-            <TableRow
-              key={"cardPhoneNumber"}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {"phone (SBP)"}
-              </TableCell>
-              <TableCell align="right">
-                {recipientData?.cardPhoneNumber}
-              </TableCell>
-            </TableRow>
+        
 
             <TableRow
               key={"email"}
@@ -123,7 +110,7 @@ function RecipientInfo({ address }) {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {"Card Number"}
+                {detectIsPhone(recipientData?.bankSpecificFieldValue) ? "SBP Phone Number" : "Card Number"}
               </TableCell>
               <TableCell align="right">
                 {recipientData?.bankSpecificFieldValue || "empty"}
@@ -159,3 +146,13 @@ function RecipientInfo({ address }) {
 }
 
 export default RecipientInfo;
+
+
+
+const detectIsPhone = (number) => {
+  const processed = number.replace(/\D/g,'');
+  if (processed.length < 16) {
+    return true
+  }
+  return false
+}
