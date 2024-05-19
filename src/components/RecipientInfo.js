@@ -81,7 +81,7 @@ function RecipientInfo({ address }) {
               <TableCell component="th" scope="row">
                 {"bankName"}
               </TableCell>
-              <TableCell align="right">{recipientData?.bankName} {detectIsPhone(recipientData?.phoneNumber) && "SBP"}</TableCell>
+              <TableCell align="right">{recipientData?.bankName} {detectIsPhone(recipientData?.bankSpecificFieldValue) && "SBP"}</TableCell>
             </TableRow>
             <TableRow
               key={"phoneNumber"}
@@ -151,6 +151,7 @@ export default RecipientInfo;
 
 const detectIsPhone = (number) => {
   const processed = number.replace(/\D/g,'');
+  console.log("heeeeero",{number,processed,processedL:processed.length})
   if (processed.length < 16) {
     return true
   }
